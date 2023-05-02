@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
-      matrix: [20.0.0, 21.1.1]
+      matrix: ["20.0.0", "21.1.1"]
     services:
       keycloak:
         image: quay.io/keycloak/keycloak:${{ matrix.version }}
