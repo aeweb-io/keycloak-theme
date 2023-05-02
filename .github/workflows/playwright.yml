@@ -23,7 +23,7 @@ jobs:
           - /provider:/opt/keycloak/provider
           - /data:/opt/keycloak/data/import
         options: >-
-          --health-cmd curl --fail http://localhost:8080/health || exit 1
+          --health-cmd "curl --fail http://localhost:8080/health || exit 1"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
