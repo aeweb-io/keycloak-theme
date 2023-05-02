@@ -1,0 +1,10 @@
+{
+    "themes": [
+        {
+            "name": "bmfs-theme",
+            "types": [
+                "login"
+            ]
+        }
+    ]
+}

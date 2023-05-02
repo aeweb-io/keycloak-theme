@@ -1,0 +1,19 @@
+{
+  "name": "bmfs-keycloak-theme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:sass": "sass -q  -I ./node_modules/ src/theme/bmfs-theme/login/resources/scss/index.scss:src/theme/bmfs-theme/login/resources/dist/index.css",
+    "build:sasss:watch": "npm run build:sass -- --watch",
+    "package": "cd src && zip -r ../providers/bmfs-theme.jar . && cd .."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@moduk/frontend": "^1.1.7",
+    "@playwright/test": "^1.33.0",
+    "govuk-frontend": "^4.5.0",
+    "sass": "^1.62.1"
+  }
+}

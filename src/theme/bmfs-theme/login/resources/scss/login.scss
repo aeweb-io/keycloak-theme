@@ -1,0 +1,60 @@
+
+
+@use '@moduk/frontend/src/css' as moduk;
+$logoWidth: 92px;
+
+.keycloak-template {
+  background-color: moduk.govuk-colour('white');
+}
+
+.keycloak-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid moduk.$govuk-border-colour;
+  padding: moduk.govuk-px-to-rem(40) 0;
+  margin-bottom: moduk.govuk-px-to-rem(40);
+}
+
+.keycloak-header__service_name {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+
+  .kc-logo-text {
+    margin-left: -$logoWidth /2 ;
+  }
+}
+
+.moduk-keyclok-row {
+  display: flex;
+  margin: 0 moduk.govuk-px-to-rem(-40);
+  .moduk-keyclok-col {
+    padding: 0 moduk.govuk-px-to-rem(40);
+    flex: 1;
+    border-right: 1px solid moduk.$govuk-border-colour;
+    &:last-of-type {
+      border: none;
+    }
+  }
+}
+
+.kc-social-section hr {
+  display: none;
+}
+
+.kc-social-provider-logo {
+  display: none;
+}
+
+.keycloak-social__links {
+
+  &, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.keycloak-social__buttton {
+  display: block;
+}
