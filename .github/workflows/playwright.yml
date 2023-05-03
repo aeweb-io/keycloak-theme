@@ -11,23 +11,6 @@ jobs:
     strategy:
       matrix:
         version: [20.0.0, 21.1.1]
-    services:
-      keycloak:
-        image: quay.io/keycloak/keycloak:${{ matrix.version }}
-        ports:
-          - 8080:8080
-        env:
-          KEYCLOAK_ADMIN: admin
-          KEYCLOAK_ADMIN_PASSWORD: admin
-        volumes:
-          - /provider:/opt/keycloak/provider
-          - /data:/opt/keycloak/data/import
-        options: >-
-          --health-cmd "curl --fail http://localhost:8080/health || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-          start-dev --import-realm --health-enabled=true
 
     steps:
     - uses: actions/checkout@v3
@@ -36,14 +19,31 @@ jobs:
         node-version: 16
     - name: Install dependencies
       run: npm ci
+
     - name: Build Sass
       run: npm run build:sass
-    - name: Package
+
+    - name: Package theme
       run: npm run package
+
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+
+    - name: Run Keycloak
+      run: podman run --rm -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin --mount type=bind,source=/providers,target=/opt/keycloak/providers --mount type=bind,source=/data,target=/opt/keycloak/data/import quay.io/keycloak/keycloak:${{ matrix.version }} start-dev --import-realm --health-enabled=true
+
+    - name: Wait for Keycloak
+      run: |
+        until curl --fail http://localhost:8080/health &> /dev/null
+        do sleep 10
+        echo waiting for keycloak
+        done
+        exit 0
+
+
     - name: Run Playwright tests
-      run: npx playwright test
+      run:
+        npx playwright test
     - uses: actions/upload-artifact@v3
       if: always()
       with:
