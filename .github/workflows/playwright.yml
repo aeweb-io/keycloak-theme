@@ -49,16 +49,20 @@ jobs:
     - uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: playwright-report
+        name: playwright-report-${{ matrix.version }}
         path: playwright-report/
         retention-days: 30
 
     - name: Upload Podman logs
       if: always()
-      run: podman logs $CONTAINER_NAME > podman.log
+      run: podman logs $CONTAINER_NAME > keycloak.log
     - uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: podman.log
-        path: podman.log
+        name: keycloak-${{ matrix.version }}.log
+        path: keycloak.log
         retention-days: 30
+
+    - name: Stop keycloak container
+      if: always()
+      run: podman stop $CONTAINER_NAME
