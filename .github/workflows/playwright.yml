@@ -8,6 +8,8 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      CONTAINER_NAME: ${{ github.event.repository.name }}
     strategy:
       matrix:
         version: [20.0.0, 21.1.1]
@@ -30,7 +32,7 @@ jobs:
       run: npx playwright install --with-deps
 
     - name: Run Keycloak
-      run: podman run --rm -d -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin --mount type=bind,source=providers,target=/opt/keycloak/providers --mount type=bind,source=data,target=/opt/keycloak/data/import quay.io/keycloak/keycloak:${{ matrix.version }} start-dev --import-realm --health-enabled=true
+      run: podman run --rm -d -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin --mount type=bind,source=providers,target=/opt/keycloak/providers --mount type=bind,source=data,target=/opt/keycloak/data/import --name $CONTAINER_NAME quay.io/keycloak/keycloak:${{ matrix.version }} start-dev --import-realm --health-enabled=true
 
     - name: Wait for Keycloak
       run: |
@@ -49,4 +51,13 @@ jobs:
       with:
         name: playwright-report
         path: playwright-report/
+        retention-days: 30
+
+    - name: Upload Podman logs
+      run: podman logs $CONTAINER_NAME > podman.log
+    - uses: actions/upload-artifact@v3
+      if: always()
+        with:
+        name: podman.log
+        path: podman.log
         retention-days: 30
