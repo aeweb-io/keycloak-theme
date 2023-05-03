@@ -30,7 +30,7 @@ jobs:
       run: npx playwright install --with-deps
 
     - name: Run Keycloak
-      run: podman run --rm -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin --mount type=bind,source=providers,target=/opt/keycloak/providers --mount type=bind,source=data,target=/opt/keycloak/data/import quay.io/keycloak/keycloak:${{ matrix.version }} start-dev --import-realm --health-enabled=true
+      run: podman run --rm -d -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin --mount type=bind,source=providers,target=/opt/keycloak/providers --mount type=bind,source=data,target=/opt/keycloak/data/import quay.io/keycloak/keycloak:${{ matrix.version }} start-dev --import-realm --health-enabled=true
 
     - name: Wait for Keycloak
       run: |
